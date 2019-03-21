@@ -14,6 +14,14 @@
 <link rel="apple-touch-icon-precomposed" href="images/icon.png">
 <link rel="shortcut icon" href="images/favicon.ico">
 <script src="js/jquery-2.1.4.min.js"></script>
+
+	<script>
+        $(document).ready(function(){
+            $("img[src='CodeServlet']").click(function(){
+                $(this).attr("src","CodeServlet?sdfsf="+Math.random());
+            })
+        })
+	</script>
 <script src="js/nprogress.js"></script>
 <script src="js/jquery.lazyload.min.js"></script>
 <!--[if gte IE 9]>
@@ -24,6 +32,7 @@
     <![endif]-->
 <!--[if lt IE 9]>
 <script>window.location.href='upgrade-browser.html';</script>
+
 <![endif]-->
 <style type="text/css">
 	.panel
@@ -131,6 +140,7 @@
 		<form action="UserServlet?method=login" method="post">
 			username:<input type="text" name="username"><br/>
 			password:<input type="password" name="password"><br/>
+			验证码:<input type="text" name="inputCode" style="width: 60px"/><img src="CodeServlet"/><br/>
 			<input type="submit" value="登陆">
 		</form>
 

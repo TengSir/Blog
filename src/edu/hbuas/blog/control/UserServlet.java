@@ -8,8 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.*;
 
+/**
+ * 自定义的servlet我们把doget和dopost请求合二为一，然后自己通过请求的方法参数来对不同的业务请求分流到不同的自定义方法中
+ */
 @WebServlet(name = "UserServlet",urlPatterns = "/UserServlet")
 public class UserServlet extends HttpServlet {
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //为了让一个servlet能应对前端的多个业务方法请求，我们不得不对serlvet做方法复用.
@@ -104,43 +108,52 @@ public class UserServlet extends HttpServlet {
      */
     protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //1.先获取上一个页面用户输入的账号信息
-        String username= request.getParameter("username");
-        String password= request.getParameter("password");
-        System.out.println("登陆的方法：\t"+username+"\t\t"+password);
+        String inputCode= request.getParameter("inputCode");
 
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            //2.查询数据库中有没有这个账户密码对应的用户信息
-            Connection con= DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Blog?characterEncoding=UTF8","root","");
+        if(inputCode.equalsIgnoreCase(request.getSession().getAttribute("code").toString())){
+            String username= request.getParameter("username");
+            String password= request.getParameter("password");
+            System.out.println("登陆的方法：\t"+username+"\t\t"+password);
 
-            PreparedStatement pre=con.prepareStatement("select *  from  users where username=? and password=?");
-            pre.setString(1,username);
-            pre.setString(2 ,password);
-            ResultSet rs= pre.executeQuery();
+            System.out.println(request.getContextPath());
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                //2.查询数据库中有没有这个账户密码对应的用户信息
+                Connection con= DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Blog?characterEncoding=UTF8","root","");
 
-            //3.判断查询结果，如果查到该用户则跳转到首页，没有则跳到登陆页面，提示错误消息
+                PreparedStatement pre=con.prepareStatement("select *  from  users where username=? and password=?");
+                pre.setString(1,username);
+                pre.setString(2 ,password);
+                ResultSet rs= pre.executeQuery();
 
-            if(rs.next()){
-                String image= rs.getString("image");
-                String nickname= rs.getString("nickname");
+                //3.判断查询结果，如果查到该用户则跳转到首页，没有则跳到登陆页面，提示错误消息
 
-
-
-                request.getSession().setAttribute("loginedUser",nickname);
-                request.getSession().setAttribute("image",image);
-                //这就是后台执行业务完成后，跳转页面的方法
+                if(rs.next()){
+                    String image= rs.getString("image");
+                    String nickname= rs.getString("nickname");
 
 
-                request.getRequestDispatcher("index.jsp").forward(request,response);
-            }else{
-                request.setCharacterEncoding("utf-8");
-                response.setCharacterEncoding("utf-8");
-                request.setAttribute("errorMessage","用户名或者密码错误！");
-                response.sendRedirect("login.jsp");
+
+                    request.getSession().setAttribute("loginedUser",nickname);
+                    request.getSession().setAttribute("image",image);
+                    //这就是后台执行业务完成后，跳转页面的方法
+
+                    request.getRequestDispatcher("index.jsp").forward(request,response);
+                }else{
+                    request.setCharacterEncoding("utf-8");
+                    response.setCharacterEncoding("utf-8");
+                    request.setAttribute("errorMessage","用户名或者密码错误！");
+                    response.sendRedirect("login.jsp");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }  finally {
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }  finally {
+        }else{
+
+            request.setAttribute("errorMessage","验证码输入错误！");
+            request.getRequestDispatcher("login.jsp").forward(request,response);
         }
+
     }
 }
