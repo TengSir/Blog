@@ -11,7 +11,7 @@
                             <%
                         }else{
                             %>
-                    <li>欢迎你:<span style="text-shadow: 0px 0px 5px darkolivegreen;color: white"><%=session.getAttribute("loginedUser") %></span><img style="width: 20px;height: 20px;border-radius: 50%;border: 1px solid gray;" src='<%=session.getAttribute("image") %>' /></li><li><a style="color:green;font-size: 12px;" href="UserServlet?method=logoff" >安全退出</a></li>
+                    <li>欢迎你:<span style="text-shadow: 0px 0px 5px darkolivegreen;color: white">${sessionScope.loginedUser}</span><img style="width: 20px;height: 20px;border-radius: 50%;border: 1px solid gray;" src='${sessionScope.image}' /></li><li><a style="color:green;font-size: 12px;" href="UserServlet?method=logoff" >安全退出</a></li>
                              <%
                         }
                     %>

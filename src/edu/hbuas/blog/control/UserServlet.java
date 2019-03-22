@@ -143,7 +143,7 @@ public class UserServlet extends HttpServlet {
                     request.setCharacterEncoding("utf-8");
                     response.setCharacterEncoding("utf-8");
                     request.setAttribute("errorMessage","用户名或者密码错误！");
-                    response.sendRedirect("login.jsp");
+                    request.getRequestDispatcher("login.jsp").forward(request,response);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

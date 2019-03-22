@@ -83,7 +83,6 @@
 </style>
 </head>
 <body class="user-select">
-
 <header class="header">
 <nav class="navbar navbar-default" id="navbar">
 <div class="container">
@@ -126,7 +125,6 @@
 </header>
 <section class="container">
 
-
 <div class="panel">
 <div class="text-center">
   <h2><stong>用户登陆</stong></h2>
@@ -134,12 +132,10 @@
 	</div>
 	<div class="padding-big">
 		<% request.setCharacterEncoding("utf-8"); %>
-		<b style="color: red;"><% if(request.getAttribute("errorMessage")!=null){
-		    out.write(request.getAttribute("errorMessage").toString());
-		} %></b>
+		<b style="color: red;">${requestScope.errorMessage}</b>
 		<form action="UserServlet?method=login" method="post">
-			username:<input type="text" name="username"><br/>
-			password:<input type="password" name="password"><br/>
+			username:<input type="text" name="username" value="${param.username}"><br/>
+			password:<input type="password" name="password" value="${param.password}"><br/>
 			验证码:<input type="text" name="inputCode" style="width: 60px"/><img src="CodeServlet"/><br/>
 			<input type="submit" value="登陆">
 		</form>

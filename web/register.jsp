@@ -125,9 +125,7 @@
 	</div>
 	<div class="padding-big">
 		<% request.setCharacterEncoding("utf-8"); %>
-		<b style="color: red;"><% if(request.getAttribute("errorMessage")!=null){
-		    out.write(request.getAttribute("errorMessage").toString());
-		} %></b>
+		<b style="color: red;">${requestScope.errorMessage}</b>
 		<form action="UserServlet?method=register" method="post">
 			username:<input type="text" name="username"><br/>
 			password:<input type="password" name="password"><br/>

@@ -1,3 +1,4 @@
+<%@ page import="edu.hbuas.blog.model.Blogs" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="zh-CN">
@@ -34,31 +35,17 @@
 <div class="content-wrap">
 <div class="content">
   <header class="article-header">
-	<h1 class="article-title"><a href="#" title="用DTcms做一个独立博客网站（响应式模板）" >用DTcms做一个独立博客网站（响应式模板）</a></h1>
+	<h1 class="article-title"><a href="#" title="<%=((Blogs)request.getAttribute("blog")).getTitle()%>" ><%=((Blogs)request.getAttribute("blog")).getTitle()%></a></h1>
 	<div class="article-meta"> <span class="item article-meta-time">
-	  <time class="time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="发表时间：2016-10-14"><i class="glyphicon glyphicon-time"></i> 2016-10-14</time>
-	  </span> <span class="item article-meta-source" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="来源：木庄网络博客"><i class="glyphicon glyphicon-globe"></i> 木庄网络博客</span> <span class="item article-meta-category" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="MZ-NetBlog主题"><i class="glyphicon glyphicon-list"></i> <a href="#" title="MZ-NetBlog主题" >MZ-NetBlog主题</a></span> <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="浏览量：219"><i class="glyphicon glyphicon-eye-open"></i> 219</span> <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> 4</span> </div>
+	  <time class="time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="发表时间：<%=((Blogs)request.getAttribute("blog")).getPublishtime()%>"><i class="glyphicon glyphicon-time"></i> <%=((Blogs)request.getAttribute("blog")).getPublishtime()%></time>
+	  </span> <span class="item article-meta-source" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="来源：木庄网络博客"><i class="glyphicon glyphicon-globe"></i> 木庄网络博客</span> <span class="item article-meta-category" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="MZ-NetBlog主题"><i class="glyphicon glyphicon-list"></i> <a href="#" title="MZ-NetBlog主题" >MZ-NetBlog主题</a></span> <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="浏览量：<%=((Blogs)request.getAttribute("blog")).getVisitedcount()%>"><i class="glyphicon glyphicon-eye-open"></i><%=((Blogs)request.getAttribute("blog")).getVisitedcount()%></span> <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> 4</span> </div>
   </header>
   <article class="article-content">
 	<p><img data-original="images/201610181557196870.jpg" src="images/201610181557196870.jpg" alt="" /></p>
-	<p>文章效果示例，文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字。</p>
-	<pre class="prettyprint lang-cs">代码示例：
-	public static double JieCheng(int number)
-	{
-		if (number == 0)
-		{
-			return 0;
-		}
+	<p>
+		<%=((Blogs)request.getAttribute("blog")).getContent()%>
 
-		//初始值必须设置为1
-		double result = 1; 
-
-		for (int i = number; i &gt;= 1; i--)
-		{
-			result = result*i;
-		}
-		return result;
-	}</pre>
+	</p>
 	<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a></div>
 
 		  <script>                  window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "1", "bdSize": "32" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=0.js?cdnversion=' + ~(-new Date() / 36e5)];</script>

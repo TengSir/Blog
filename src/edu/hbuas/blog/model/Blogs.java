@@ -10,6 +10,30 @@ public class Blogs {
   private long visitedcount;
   private long userid;
 
+  public Blogs() {
+  }
+
+  @Override
+  public String toString() {
+    return "Blogs{" +
+            "blogid=" + blogid +
+            ", title='" + title + '\'' +
+            ", content='" + content + '\'' +
+            ", publishtime='" + publishtime + '\'' +
+            ", visitedcount=" + visitedcount +
+            ", userid=" + userid +
+            '}';
+  }
+
+  public Blogs(long blogid, String title, String content, String publishtime, long visitedcount, long userid) {
+    this.blogid = blogid;
+    this.title = title;
+    this.content = content;
+    this.publishtime = publishtime;
+    this.visitedcount = visitedcount;
+    this.userid = userid;
+  }
+
 
   public long getBlogid() {
     return blogid;
