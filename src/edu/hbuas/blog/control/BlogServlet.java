@@ -1,6 +1,6 @@
 package edu.hbuas.blog.control;
 
-import edu.hbuas.blog.model.Blogs;
+import edu.hbuas.blog.model.javabean.Blogs;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

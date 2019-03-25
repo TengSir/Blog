@@ -1,4 +1,4 @@
-<%@ page import="edu.hbuas.blog.model.Blogs" %>
+<%@ page import="edu.hbuas.blog.model.javabean.Blogs" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="zh-CN">

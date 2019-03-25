@@ -1,4 +1,4 @@
-package edu.hbuas.blog.model;
+package edu.hbuas.blog.model.javabean;
 
 
 public class Users {
