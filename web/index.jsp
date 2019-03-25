@@ -5,7 +5,7 @@
 	}
 %>
 <%@ page import="edu.hbuas.blog.control.BlogServlet" %>
-<%@ page import="edu.hbuas.blog.model.Blogs" %>
+<%@ page import="edu.hbuas.blog.model.javabean.Blogs" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
