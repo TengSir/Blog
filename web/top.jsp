@@ -4,18 +4,14 @@
         <div class="container">
             <div class="header-topbar hidden-xs link-border">
                 <ul class="site-nav topmenu">
-                    <%
-                        if(session.getAttribute("loginedUser")==null){
-                            %>
-                                 <li><a href="login.jsp" >登陆</a></li>
-                            <%
-                        }else{
-                            %>
-                    <li>欢迎你:<span style="text-shadow: 0px 0px 5px darkolivegreen;color: white">${sessionScope.loginedUser}</span><img style="width: 20px;height: 20px;border-radius: 50%;border: 1px solid gray;" src='${sessionScope.image}' /></li><li><a style="color:green;font-size: 12px;" href="UserServlet?method=logoff" >安全退出</a></li>
-                             <%
-                        }
-                    %>
-
+                    <C:choose>
+                        <C:when test="${empty sessionScope.user}">
+                            <li><a href="login.jsp" >登陆</a></li>
+                        </C:when>
+                        <C:otherwise>
+                            <li>欢迎你:<span style="text-shadow: 0px 0px 5px darkolivegreen;color: white">${sessionScope.user.nickname}</span><img style="width: 20px;height: 20px;border-radius: 50%;border: 1px solid gray;" src='${sessionScope.user.image}' /></li><li><a style="color:green;font-size: 12px;" href="UserServlet?method=logoff" >安全退出</a></li>
+                        </C:otherwise>
+                    </C:choose>
                     <li><a href="#" >标签云</a></li>
                     <li><a href="#" rel="nofollow" >读者墙</a></li>
                     <li><a href="#" title="RSS订阅" >

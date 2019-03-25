@@ -1,5 +1,9 @@
 package edu.hbuas.blog.control;
 
+import edu.hbuas.blog.model.dao.UserDAO;
+import edu.hbuas.blog.model.dao.UserDAOImp;
+import edu.hbuas.blog.model.javabean.Users;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +17,12 @@ import java.sql.*;
  */
 @WebServlet(name = "UserServlet",urlPatterns = "/UserServlet")
 public class UserServlet extends HttpServlet {
+    private UserDAO  userDAO;
+
+    @Override
+    public void init() throws ServletException {
+        userDAO=new UserDAOImp();
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -57,21 +67,18 @@ public class UserServlet extends HttpServlet {
         String age= request.getParameter("age");
         System.out.println(username+"\t"+password+"\t"+nickname+"\t"+sex+"\t"+age);
         //2.链接数据库，将用户填写的资料插入到用户信息表，生成一条新的用户u 记录信息
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            //2.查询数据库中有没有这个账户密码对应的用户信息
-            Connection con= DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Blog?characterEncoding=UTF8","root","");
 
-            PreparedStatement pre=con.prepareStatement("insert into users(username,password,nickname,sex,age,image,level) values(?,?,?,?,?,'images/100.gif',0)");
-            pre.setString(1,username);
-            pre.setString(2 ,password);
-            pre.setString(3 ,nickname);
-            pre.setString(4 ,sex);
-            pre.setString(5 ,age);
-            int result=pre.executeUpdate();
+        Users  u=new Users();
+        u.setUsername(username);
+        u.setPassword(password);
+        u.setNickname(nickname);
+        u.setSex(Long.parseLong(sex));
+        u.setAge(Long.parseLong(age));
+        try {
+          boolean result=userDAO.register(u);
 
             //3.判断插入语句的执行结果，跳转到页面提示响应的信息
-            if(result>0){
+            if(result){
                 response.sendRedirect("login.jsp");
             }else{
                 request.getRequestDispatcher("register.jsp").forward(request,response);
@@ -117,27 +124,14 @@ public class UserServlet extends HttpServlet {
 
             System.out.println(request.getContextPath());
             try {
-                Class.forName("com.mysql.jdbc.Driver");
                 //2.查询数据库中有没有这个账户密码对应的用户信息
-                Connection con= DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Blog?characterEncoding=UTF8","root","");
 
-                PreparedStatement pre=con.prepareStatement("select *  from  users where username=? and password=?");
-                pre.setString(1,username);
-                pre.setString(2 ,password);
-                ResultSet rs= pre.executeQuery();
-
+                Users u=userDAO.login(username,password);
                 //3.判断查询结果，如果查到该用户则跳转到首页，没有则跳到登陆页面，提示错误消息
 
-                if(rs.next()){
-                    String image= rs.getString("image");
-                    String nickname= rs.getString("nickname");
-
-
-
-                    request.getSession().setAttribute("loginedUser",nickname);
-                    request.getSession().setAttribute("image",image);
+                if(u!=null){
                     //这就是后台执行业务完成后，跳转页面的方法
-
+                    request.getSession().setAttribute("user",u);
                     request.getRequestDispatcher("index.jsp").forward(request,response);
                 }else{
                     request.setCharacterEncoding("utf-8");

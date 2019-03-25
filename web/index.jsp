@@ -1,13 +1,13 @@
 
-<%
-	if(request.getAttribute("allBlogs")==null){
-	    request.getRequestDispatcher("/BlogServlet?method=listTopBlogs").forward(request,response);
-	}
-%>
 <%@ page import="edu.hbuas.blog.control.BlogServlet" %>
 <%@ page import="edu.hbuas.blog.model.javabean.Blogs" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="C" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<C:if test="${empty requestScope.allBlogs}">
+	<C:redirect url="/BlogServlet?method=listTopBlogs"></C:redirect>
+</C:if>
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -80,24 +80,21 @@
 		</div>
   </div>
 
-	<% ArrayList<Blogs> blogs=(ArrayList<Blogs>)request.getAttribute("allBlogs");
-		for(Blogs b:blogs){
-	%>
 
+    <C:forEach var="b" items="${requestScope.allBlogs}"   varStatus="s">
+        <article class="excerpt excerpt-5" style=""><a class="focus" href="#" title="${b.title}" target="_blank" ><img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: inline;"></a>
+            <header><a class="cat" href="#" title="java板块" >java板块<i></i></a>
+                <h2><a href="BlogServlet?method=getDetailOfBlogById&blogid=${b.blogid}" title="${b.title}" target="_blank" >${b.title}</a>
+                </h2>
+            </header>
+            <p class="meta">
+                <time class="time"><i class="glyphicon glyphicon-time"></i>${b.publishtime}</time>
+                <span class="views"><i class="glyphicon glyphicon-eye-open"></i> ${b.visitedcount}</span> <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>0</a>
+            </p>
+            <p class="note">${fn:substring(b.content, 0,40)} ...</p>
+        </article>
+    </C:forEach>
 
-	<article class="excerpt excerpt-5" style=""><a class="focus" href="#" title="<%=b.getTitle() %>" target="_blank" ><img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: inline;"></a>
-		<header><a class="cat" href="#" title="java板块" >java板块<i></i></a>
-			<h2><a href="BlogServlet?method=getDetailOfBlogById&blogid=<%=b.getBlogid()%>" title="<%=b.getTitle() %>" target="_blank" ><%=b.getTitle() %></a>
-			</h2>
-		</header>
-		<p class="meta">
-			<time class="time"><i class="glyphicon glyphicon-time"></i> <%=b.getPublishtime()%></time>
-			<span class="views"><i class="glyphicon glyphicon-eye-open"></i> <%=b.getVisitedcount()%></span> <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>0</a>
-		</p>
-		<p class="note"><%=b.getContent()%></p>
-	</article>
-
-	<%}%>
   <nav class="pagination" style="display: none;">
 	<ul>
 	  <li class="prev-page"></li>

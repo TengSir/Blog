@@ -60,7 +60,6 @@ public class BlogServlet extends HttpServlet {
                 b.setContent(rs.getString("content"));
                 b.setPublishtime(rs.getString("publishtime"));
                 b.setVisitedcount(rs.getInt("visitedcount"));
-                System.out.println(b);
             }
 
             request.setAttribute("blog",b);
