@@ -22,5 +22,6 @@
     <orderEntry type="library" exported="" scope="PROVIDED" name="Tomcat 8.5.32" level="application_server_libraries" />
     <orderEntry type="library" exported="" name="mysql-connector-java-5.1.41-bin" level="project" />
     <orderEntry type="library" name="jstl-1.2" level="project" />
+    <orderEntry type="library" name="commons-collections-3.2.1" level="project" />
   </component>
 </module>
