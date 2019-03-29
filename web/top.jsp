@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <header class="header">
     <nav class="navbar navbar-default" id="navbar">
         <div class="container">

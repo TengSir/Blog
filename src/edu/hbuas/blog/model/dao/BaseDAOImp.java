@@ -22,31 +22,31 @@ public class BaseDAOImp implements BaseDAO {
 
       static{
           //jndi的代码
-          Context  c= null;
-          try {
-              c = new InitialContext();
-              dataSource=(DataSource)c.lookup("java:comp/evn/jdbc/blog");
+            Context  c= null;
+                    try {
+                           c = new InitialContext();
+                          dataSource=(DataSource)c.lookup("java:comp/env/jdbc/blog");
 
-          } catch (NamingException e) {
-              e.printStackTrace();
-          }
-
-
+                     } catch (NamingException e) {
+                         e.printStackTrace();
+                      }
           //链接池的代码
-          /**
-           *  Properties  properties=new Properties();
-           *           try {
-           *               properties.load(new FileInputStream("main/resources/jdbc.properties"));
-           *           } catch (IOException e) {
-           *               e.printStackTrace();
-           *           }
-           *           dataSourceFactory=new BasicDataSourceFactory();//链接池工厂
-           *           try {
-           *               dataSource=dataSourceFactory.createDataSource(properties);
-           *           } catch (Exception e) {
-           *               e.printStackTrace();
-           *           }
-           */
+
+            /** Properties  properties=new Properties();
+                      try {
+                          properties.load(new FileInputStream("main/resources/jdbc.properties"));
+                    } catch (IOException e) {
+                         e.printStackTrace();
+                     }
+          System.out.println(properties.size());
+                    dataSourceFactory=new BasicDataSourceFactory();//链接池工厂
+                  try {
+                         dataSource=dataSourceFactory.createDataSource(properties);
+                     } catch (Exception e) {
+                         e.printStackTrace();
+                     }
+          System.out.println("initial datasource"+dataSource);
+             **/
       }
 
     public Statement getSta() {

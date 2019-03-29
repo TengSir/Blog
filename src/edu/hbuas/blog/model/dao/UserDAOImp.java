@@ -32,6 +32,29 @@ public class UserDAOImp  extends BaseDAOImp implements  UserDAO{
     }
 
     @Override
+    public Users login(String username) {
+        String loginSQL="select *  from  users where username=?";
+        Users u=null;
+        try {
+            PreparedStatement pre=getPre(loginSQL);
+            pre.setString(1,username);
+            ResultSet rs= pre.executeQuery();
+            if(rs.next()) {
+                u=new Users();
+                u.setAge(rs.getInt("age"));
+                u.setSex(rs.getInt("sex"));
+                u.setUserid(rs.getInt("userid"));
+                u.setNickname(rs.getString("nickname"));
+                u.setImage(rs.getString("image"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return u;
+    }
+
+    @Override
     public boolean register(Users user) {
         String loginSQL="insert into users(username,password,nickname,sex,age,image,level) values(?,?,?,?,?,'images/100.gif',0)";
        boolean result=false;

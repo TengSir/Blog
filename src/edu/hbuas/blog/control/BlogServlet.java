@@ -1,5 +1,7 @@
 package edu.hbuas.blog.control;
 
+import edu.hbuas.blog.model.dao.BlogDAO;
+import edu.hbuas.blog.model.dao.BlogDAOImp;
 import edu.hbuas.blog.model.javabean.Blogs;
 
 import javax.servlet.ServletException;
@@ -13,9 +15,18 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "BlogServlet",urlPatterns = "/BlogServlet")
 public class BlogServlet extends HttpServlet {
+    private BlogDAO blogDAO;
+
+    @Override
+    public void init() throws ServletException {
+        blogDAO=new BlogDAOImp();
+
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("utf-8");
@@ -41,26 +52,9 @@ public class BlogServlet extends HttpServlet {
      * @throws IOException
      */
     protected void getDetailOfBlogById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("查询帖子详情的方法");
         String blogid=request.getParameter("blogid");
-        System.out.println("取出来的blogid"+blogid);
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            //2.查询数据库中有没有这个账户密码对应的用户信息
-            Connection con= DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Blog?characterEncoding=UTF8","root","");
-
-            PreparedStatement pre=con.prepareStatement("select * from blogs  where blogid=?");
-            pre.setInt(1,Integer.parseInt(blogid));
-            ResultSet rs= pre.executeQuery();
-            Blogs  b=new Blogs();
-            if(rs.next()){
-
-                b.setBlogid(rs.getInt("blogid"));
-                b.setTitle(rs.getString("title"));
-                b.setContent(rs.getString("content"));
-                b.setPublishtime(rs.getString("publishtime"));
-                b.setVisitedcount(rs.getInt("visitedcount"));
-            }
+          Blogs b=blogDAO.getBlogDetailById(Integer.parseInt(blogid));
 
             request.setAttribute("blog",b);
             request.getRequestDispatcher("show.jsp").forward(request,response);
@@ -79,26 +73,8 @@ public class BlogServlet extends HttpServlet {
      * @throws IOException
      */
     protected void listTopBlogs(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("进入到这个方法了！");
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            //2.查询数据库中有没有这个账户密码对应的用户信息
-            Connection con= DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Blog?characterEncoding=UTF8","root","");
-
-            PreparedStatement pre=con.prepareStatement("select * from blogs order by blogid desc ");
-            ResultSet rs= pre.executeQuery();
-
-            ArrayList<Blogs> bs=new ArrayList<>();
-
-            while(rs.next()){
-                Blogs  b=new Blogs();
-                b.setBlogid(rs.getInt("blogid"));
-                b.setTitle(rs.getString("title"));
-                b.setContent(rs.getString("content"));
-                b.setPublishtime(rs.getString("publishtime"));
-                b.setVisitedcount(rs.getInt("visitedcount"));
-                bs.add(b);
-            }
+         List<Blogs> bs=blogDAO.listBlogs();
 
             request.setAttribute("allBlogs",bs);
             request.getRequestDispatcher("index.jsp").forward(request,response);

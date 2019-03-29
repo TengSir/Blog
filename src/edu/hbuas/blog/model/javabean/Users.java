@@ -84,4 +84,17 @@ public class Users {
     this.level = level;
   }
 
+  @Override
+  public String toString() {
+    return "Users{" +
+            "userid=" + userid +
+            ", username='" + username + '\'' +
+            ", password='" + password + '\'' +
+            ", nickname='" + nickname + '\'' +
+            ", sex=" + sex +
+            ", age=" + age +
+            ", image='" + image + '\'' +
+            ", level=" + level +
+            '}';
+  }
 }
