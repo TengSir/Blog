@@ -3,19 +3,18 @@ package edu.hbuas.blog.control;
 import edu.hbuas.blog.model.dao.UserDAO;
 import edu.hbuas.blog.model.dao.UserDAOImp;
 import edu.hbuas.blog.model.javabean.Users;
-
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.http.*;
+import java.io.*;
 import java.sql.*;
+import java.util.UUID;
 
 /**
  * 自定义的servlet我们把doget和dopost请求合二为一，然后自己通过请求的方法参数来对不同的业务请求分流到不同的自定义方法中
  */
+@MultipartConfig
 @WebServlet(name = "UserServlet",urlPatterns = "/UserServlet")
 public class UserServlet extends HttpServlet {
     private UserDAO  userDAO;
@@ -59,8 +58,40 @@ public class UserServlet extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
+
     protected void register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //1.获取表单上用户输入的要注册的用户信息
+
+
+        Part  part=request.getPart("head");
+        System.out.println(part.getContentType());//文件类型
+
+        String  uuidName=UUID.randomUUID().toString();
+        StringBuffer  childpath=new StringBuffer();
+        for(int n=0;n<uuidName.length();n++)
+        {
+           childpath.append( uuidName.charAt(n)+"/");
+        }
+         String rootpath= request.getRealPath("upload")+"/"+childpath;
+        File path=new File(rootpath);
+        path.mkdirs();
+        String newFileName=uuidName+"."+part.getContentType().substring(part.getContentType().indexOf("/")+1,part.getContentType().length());
+
+        String fullPath=newFileName;
+        FileOutputStream  out=new FileOutputStream(rootpath+newFileName);
+
+        InputStream  in=part.getInputStream();
+        byte[] bs=new byte[1024];
+        int len=-1;
+        while((len=in.read(bs))!=-1){
+
+            out.write(bs,0,len);
+        }
+        out.flush();
+        out.close();
+        in.close();
+
+
+
         String username= request.getParameter("username");
         String password= request.getParameter("password");
         String nickname= request.getParameter("nickname");
@@ -73,6 +104,7 @@ public class UserServlet extends HttpServlet {
         u.setUsername(username);
         u.setPassword(password);
         u.setNickname(nickname);
+        u.setImage("upload/"+childpath+newFileName);
         u.setSex(Long.parseLong(sex));
         u.setAge(Long.parseLong(age));
         try {
@@ -112,7 +144,9 @@ public class UserServlet extends HttpServlet {
      * @throws IOException
      */
     protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //当前这个login方法对应的前端请求分两种
+
+
+       //当前这个login方法对应的前端请求分两种
         //一种是用户正常登陆，需要填写用户名和密码以及验证码
 
         if(request.getParameter("username")!=null&&request.getParameter("password")!=null&&request.getParameter("inputCode")!=null){
@@ -123,7 +157,6 @@ public class UserServlet extends HttpServlet {
             if(inputCode.equalsIgnoreCase(request.getSession().getAttribute("code").toString())){
                 String username= request.getParameter("username");
                 String password= request.getParameter("password");
-                System.out.println("登陆的方法：\t"+username+"\t\t"+password);
 
                 System.out.println(request.getContextPath());
                 try {
@@ -137,7 +170,6 @@ public class UserServlet extends HttpServlet {
                         String[]  values=request.getParameterValues("rememberMe");
                         if(values==null){
                             System.out.println("用户不要记住密码");
-
                         }else{
                             Cookie  usernameCookie=new Cookie("username",username);
                             usernameCookie.setMaxAge(60);
@@ -164,7 +196,6 @@ public class UserServlet extends HttpServlet {
             }
 
         }else{
-            System.out.println("进入到三天面登陆的业务分支");
             //第二种自动登陆（三天免登陆），此时用户没有填写任何用户名和密码以及验证码
             String username=null;
             Cookie[]  cs=request.getCookies();
@@ -174,13 +205,10 @@ public class UserServlet extends HttpServlet {
                     break;
                 }
             }
-            System.out.println(username);
             Users  u=userDAO.login(username);
-            System.out.println(u);
             request.getSession().setAttribute("user",u);
             request.getRequestDispatcher("index.jsp").forward(request,response);
         }
-
 
     }
 }

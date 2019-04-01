@@ -126,12 +126,12 @@
 	<div class="padding-big">
 		<% request.setCharacterEncoding("utf-8"); %>
 		<b style="color: red;">${requestScope.errorMessage}</b>
-		<form action="UserServlet?method=register" method="post">
+		<form action="UserServlet?method=register" method="post" enctype="multipart/form-data">
 			username:<input type="text" name="username"><br/>
 			password:<input type="password" name="password"><br/>
 			nickname:<input type="text" name="nickname"><br/>
 			sex:<input type="radio" value="0" name="sex" checked>男<input type="radio" value="1" name="sex">女<br/>
-
+			头像:<input type="file" name="head" style="display: inline"><br/>
 			age:<select name="age">
 				<%
 					for(int n=0;n<=100;n++){
@@ -143,6 +143,7 @@
 				%>
 
 			</select><br/>
+
 			<input type="submit" value="注册">
 		</form>
 

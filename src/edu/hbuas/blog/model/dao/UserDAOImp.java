@@ -56,7 +56,7 @@ public class UserDAOImp  extends BaseDAOImp implements  UserDAO{
 
     @Override
     public boolean register(Users user) {
-        String loginSQL="insert into users(username,password,nickname,sex,age,image,level) values(?,?,?,?,?,'images/100.gif',0)";
+        String loginSQL="insert into users(username,password,nickname,sex,age,image,level) values(?,?,?,?,?,?,0)";
        boolean result=false;
         try {
             PreparedStatement pre=getPre(loginSQL);
@@ -65,6 +65,7 @@ public class UserDAOImp  extends BaseDAOImp implements  UserDAO{
             pre.setString(3 ,user.getNickname());
             pre.setLong(4 ,user.getSex());
             pre.setLong(5 ,user.getAge());
+            pre.setString(6,user.getImage());
             result=pre.executeUpdate()>0?true:false;
 
         } catch (Exception e) {

@@ -42,7 +42,7 @@
                     <li><a data-cont="IT技术笔记" title="IT技术笔记" href="#" >IT技术笔记</a></li>
                     <li><a data-cont="源码分享" title="源码分享" href="#" >源码分享</a></li>
                     <li><a data-cont="靠谱网赚" title="靠谱网赚" href="#" >靠谱网赚</a></li>
-                    <li><a data-cont="资讯分享" title="资讯分享" href="#" >资讯分享</a></li>
+                    <li><a data-cont="资讯分享" title="资讯分享" href="file.jsp" >文件下载</a></li>
                 </ul>
             </div>
         </div>
