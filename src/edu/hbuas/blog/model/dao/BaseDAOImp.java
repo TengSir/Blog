@@ -7,7 +7,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import javax.swing.plaf.nimbus.State;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
@@ -22,32 +24,43 @@ public class BaseDAOImp implements BaseDAO {
 
       static{
           //jndi的代码
-            Context  c= null;
+         /*   Context  c= null;
                     try {
                            c = new InitialContext();
                           dataSource=(DataSource)c.lookup("java:comp/env/jdbc/blog");
 
                      } catch (NamingException e) {
                          e.printStackTrace();
-                      }
+                      }*/
           //链接池的代码
+          File proFile=new File("/Users/tengsir/workspace/java/idea/Blog/src/main/resources/jdbc.properties");
+          File  f=new File(".");
+          System.out.println(f.getAbsoluteFile());
+          System.out.println(proFile.getAbsoluteFile());
+          FileInputStream in= null;
+          try {
+              in = new FileInputStream(proFile);
+          } catch (FileNotFoundException e) {
+              e.printStackTrace();
+          }
+          Properties  properties=new Properties();
+          try {
+              properties.load(in);
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+          for(Object key:properties.keySet()){
+              System.out.println(key+"="+properties.get(key));
+          }
+          dataSourceFactory=new BasicDataSourceFactory();//链接池工厂
+          try {
+              dataSource=dataSourceFactory.createDataSource(properties);
+          } catch (Exception e) {
+              e.printStackTrace();
+          }
 
-            /** Properties  properties=new Properties();
-                      try {
-                          properties.load(new FileInputStream("main/resources/jdbc.properties"));
-                    } catch (IOException e) {
-                         e.printStackTrace();
-                     }
-          System.out.println(properties.size());
-                    dataSourceFactory=new BasicDataSourceFactory();//链接池工厂
-                  try {
-                         dataSource=dataSourceFactory.createDataSource(properties);
-                     } catch (Exception e) {
-                         e.printStackTrace();
-                     }
-          System.out.println("initial datasource"+dataSource);
-             **/
       }
+
 
     public Statement getSta() {
         if(con==null)
@@ -87,6 +100,10 @@ public class BaseDAOImp implements BaseDAO {
     }
     public void disposeResource(Connection con, Statement sta,PreparedStatement pre,ResultSet rs){
 
+    }
+
+    public static void main(String[] args) {
+        System.out.println("test");
     }
 
 

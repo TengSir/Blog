@@ -10,7 +10,7 @@
                             <li><a href="login.jsp" >登陆</a></li>
                         </C:when>
                         <C:otherwise>
-                            <li>欢迎你:<span style="text-shadow: 0px 0px 5px darkolivegreen;color: white">${sessionScope.user.nickname}</span><img style="width: 20px;height: 20px;border-radius: 50%;border: 1px solid gray;" src='${sessionScope.user.image}' /></li><li><a style="color:green;font-size: 12px;" href="UserServlet?method=logoff" >安全退出</a></li>
+                            <li>欢迎你:<span style="text-shadow: 0px 0px 5px darkolivegreen;color: white"><a href="admin/profile.jsp">${sessionScope.user.nickname}</a></span><img style="width: 20px;height: 20px;border-radius: 50%;border: 1px solid gray;" src='${sessionScope.user.image}' /></li><li><a style="color:green;font-size: 12px;" href="UserServlet?method=logoff" >安全退出</a></li>
                         </C:otherwise>
                     </C:choose>
                     <li><a href="#" >标签云</a></li>

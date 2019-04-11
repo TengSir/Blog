@@ -7,9 +7,9 @@
           <element id="module-output" name="Blog" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="mysql-connector-java-5.1.41-bin" />
-          <element id="library" level="project" name="jstl-1.2" />
           <element id="library" level="project" name="commons-collections-3.2.1" />
+          <element id="library" level="project" name="jstl-1.2" />
+          <element id="library" level="project" name="mysql-connector-java-5.1.41-bin" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="Blog/web/Web" />

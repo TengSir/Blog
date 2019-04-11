@@ -28,8 +28,7 @@ public class UserServlet extends HttpServlet {
 
         //为了让一个servlet能应对前端的多个业务方法请求，我们不得不对serlvet做方法复用.
         //前端我们通过每次请求过来的时候传入一个名字为method参数，通过判断参数的值来知道用户点击了哪个请求，然后调用对应的自定义的方法
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("utf-8");
+
         String method=request.getParameter("method");
         switch (method){
             case "login":{
@@ -38,6 +37,14 @@ public class UserServlet extends HttpServlet {
             }
             case "logoff":{
                 logoff(request,response);
+                break;
+            }
+            case "checkUserExist":{
+                checkUserExist(request,response);
+                break;
+            }
+            case "checkCode":{
+                checkCode(request,response);
                 break;
             }
             case "register":{
@@ -49,6 +56,39 @@ public class UserServlet extends HttpServlet {
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
+    }
+
+    protected void checkCode(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String yourinput=request.getParameter("code");
+
+        String systemCode=request.getSession().getAttribute("code").toString();
+
+        System.out.println(yourinput+"---"+systemCode);
+
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter  out=response.getWriter();
+
+        out.write(yourinput.equalsIgnoreCase(systemCode)+"");
+
+        out.flush();
+        out.close();
+
+    } protected void checkUserExist(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("请求到后台了");
+        String username=request.getParameter("username");
+        System.out.println("传过来到用户名"+username);
+        boolean result=userDAO.checkUserExists(username);
+        System.out.println(result);
+
+
+
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter  out=response.getWriter();
+
+        out.write(result+"");
+        out.flush();
+        out.close();
+
     }
 
     /**
@@ -154,7 +194,7 @@ public class UserServlet extends HttpServlet {
             //1.先获取上一个页面用户输入的账号信息
             String inputCode= request.getParameter("inputCode");
 
-            if(inputCode.equalsIgnoreCase(request.getSession().getAttribute("code").toString())){
+//            if(inputCode.equalsIgnoreCase(request.getSession().getAttribute("code").toString())){
                 String username= request.getParameter("username");
                 String password= request.getParameter("password");
 
@@ -189,11 +229,11 @@ public class UserServlet extends HttpServlet {
                     e.printStackTrace();
                 }  finally {
                 }
-            }else{
-
-                request.setAttribute("errorMessage","验证码输入错误！");
-                request.getRequestDispatcher("login.jsp").forward(request,response);
-            }
+//            }else{
+//
+//                request.setAttribute("errorMessage","验证码输入错误！");
+//                request.getRequestDispatcher("login.jsp").forward(request,response);
+//            }
 
         }else{
             //第二种自动登陆（三天免登陆），此时用户没有填写任何用户名和密码以及验证码

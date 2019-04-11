@@ -3,4 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+
+    <filter>
+        <filter-name>SessionChekerFilter</filter-name>
+        <filter-class>edu.hbuas.blog.control.filter.SessionChekerFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SessionChekerFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+
+
+    <listener>
+        <listener-class>edu.hbuas.blog.control.listener.SessionListener</listener-class>
+    </listener>
+
+
+
 </web-app>

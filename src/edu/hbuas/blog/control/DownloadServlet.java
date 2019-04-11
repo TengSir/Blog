@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 
-@WebServlet(name = "FIleDownloaderServlet",urlPatterns = "/FIleDownloaderServlet")
-public class FileDownloaderServlet extends HttpServlet {
+@WebServlet(name = "DownloadServlet",urlPatterns = "/DownloadServlet")
+public class DownloadServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String realName="软工培养方案.docx";

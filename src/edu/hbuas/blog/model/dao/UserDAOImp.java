@@ -27,7 +27,6 @@ public class UserDAOImp  extends BaseDAOImp implements  UserDAO{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return u;
     }
 
@@ -67,6 +66,24 @@ public class UserDAOImp  extends BaseDAOImp implements  UserDAO{
             pre.setLong(5 ,user.getAge());
             pre.setString(6,user.getImage());
             result=pre.executeUpdate()>0?true:false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean checkUserExists(String username) {
+        String sql="select 1 from  users where username=?";
+        boolean result=false;
+        ResultSet rs=null;
+        try {
+            PreparedStatement pre=getPre(sql);
+            pre.setString(1,username);
+            rs=pre.executeQuery();
+            result=rs.next()?true:false;
 
         } catch (Exception e) {
             e.printStackTrace();
