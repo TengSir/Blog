@@ -10,10 +10,24 @@ import java.util.List;
 
 public class BlogDAOImp extends  BaseDAOImp implements BlogDAO {
     @Override
-    public List<Blogs> listBlogs() {
+    public int getAllCountOfBlogs() {
+        int result=0;
+        ResultSet rs=null;
+        try {
+             rs=getSta().executeQuery("select count(blogid) from blogs");
+             rs.next();
+             result=rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public List<Blogs> listBlogsByPage(int page,int count) {
         List<Blogs> bs=new ArrayList<>();
         try {
-            ResultSet rs=getSta().executeQuery("select *  from blogs");
+            ResultSet rs=getSta().executeQuery("select *  from blogs limit "+(page-1)*count+","+count);
             while(rs.next()){
                 Blogs b=new Blogs();
                 b.setBlogid(rs.getInt("blogid"));

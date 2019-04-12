@@ -6,7 +6,7 @@
 <%@ taglib prefix="C" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <C:if test="${empty requestScope.allBlogs}">
-	<C:redirect url="/BlogServlet?method=listTopBlogs"></C:redirect>
+	<C:redirect url="/BlogServlet?method=listTopBlogs&page=1&count=3"></C:redirect>
 </C:if>
 <!doctype html>
 <html lang="zh-CN">
@@ -84,7 +84,7 @@
     <C:forEach var="b" items="${requestScope.allBlogs}"   varStatus="s">
         <article class="excerpt excerpt-5" style=""><a class="focus" href="#" title="${b.title}" target="_blank" ><img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: inline;"></a>
             <header><a class="cat" href="#" title="java板块" >java板块<i></i></a>
-                <h2><a href="BlogServlet?method=getDetailOfBlogById&blogid=${b.blogid}" title="${b.title}" target="_blank" >${b.title}</a>
+                <h2><a href="BlogServlet?method=getDetailOfBlogById&blogid=${b.blogid}" title="${b.title}" target="_blank" >${b.blogid}---${b.title}</a>
                 </h2>
             </header>
             <p class="meta">
@@ -94,7 +94,11 @@
             <p class="note">${fn:substring(b.content, 0,40)} ...</p>
         </article>
     </C:forEach>
-
+	<a href="/BlogServlet?method=listTopBlogs&page=1&count=3">首页</a>
+	<a href="/BlogServlet?method=listTopBlogs&page=${requestScope.pageBean.previousPage}&count=3">上一页</a>
+	<a href="/BlogServlet?method=listTopBlogs&page=${requestScope.pageBean.nextPage}&count=3">下一页</a>
+	<a href="/BlogServlet?method=listTopBlogs&page=${requestScope.pageBean.allPages}&count=3">尾页</a>
+	<span>当前第${requestScope.pageBean.nowPage}页/总共${requestScope.pageBean.allPages}页 ,每页${requestScope.pageBean.everyPageCount}条/总共${requestScope.pageBean.allCount}条</span>
   <nav class="pagination" style="display: none;">
 	<ul>
 	  <li class="prev-page"></li>

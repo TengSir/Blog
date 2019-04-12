@@ -30,82 +30,23 @@
 
             	var code=$(this).val();
 
-            	$.get("/UserServlet?method=checkCode&code="+code,function(data){
+					$.get("/UserServlet?method=checkCode&code="+code,function(data){
 						if(data=='false'){
-							alert('验证码输入错误！');
+							alert("验证码错误");
 						}
-				})
-
-
-
-				//ajax是由js发起的，所以肯定要使用javascript提供的这个能发起请求的的ajax对象
-				var  xhr=new XMLHttpRequest();//创建了一个ajax请求的对象
-
-				xhr.onreadystatechange=function(){
-
-					//一般来说只有ajax对象的解析状态为4，服务器状态码200，才来解析结果
-					if (xhr.readyState==4 && xhr.status==200)
-					{
-						var result=xhr.responseText;
-						if(result=='false'){
-							alert('用户名不存在，请检查用户名是否是注册过的账户！');
-						}
-
-					}
-
-				};//提前准备好告诉ajax当服务器给我回过来结构我应该调用那个方法来处理结果
-
-				xhr.open("get","/UserServlet?method=checkUserExist&username="+username);//指定ajax要请求到后台地址
-
-				xhr.send(null);//发起这个请求
+					});
 
 			})
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             //这事焦点失去后判断用户名是否存在的ajax代码
+
             $("#username").blur(function(){
-            	var  username=$(this).val();
-
-				//ajax是由js发起的，所以肯定要使用javascript提供的这个能发起请求的的ajax对象
-            	var  xhr=new XMLHttpRequest();//创建了一个ajax请求的对象
-
-				xhr.onreadystatechange=function(){
-
-					//一般来说只有ajax对象的解析状态为4，服务器状态码200，才来解析结果
-					if (xhr.readyState==4 && xhr.status==200)
-					{
-						var result=xhr.responseText;
-						if(result=='false'){
-							alert('用户名不存在，请检查用户名是否是注册过的账户！');
-						}
-
+            	$.post("/UserServlet",{"method":"checkUserExist","username":$(this).val()},function(aaa){
+					if(aaa=='false'){
+						alert('用户名不存在，请检查用户名是否是注册过的账户！');
 					}
-
-				};//提前准备好告诉ajax当服务器给我回过来结构我应该调用那个方法来处理结果
-
-				xhr.open("get","/UserServlet?method=checkUserExist&username="+username);//指定ajax要请求到后台地址
-
-				xhr.send(null);//发起这个请求
+				})
 			});
 
         })
