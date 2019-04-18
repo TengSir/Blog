@@ -26,7 +26,7 @@
 <link rel="shortcut icon" href="images/favicon.ico">
 <script src="js/jquery-2.1.4.min.js"></script>
 <script src="js/nprogress.js"></script>
-
+<script src="js/jquery.lazyload.min.js"></script>
 <!--[if gte IE 9]>
     <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script src="js/html5shiv.min.js" type="text/javascript"></script>
@@ -38,7 +38,6 @@
 <![endif]-->
 </head>
 <body class="user-select">
-
 <!-- 这html的注释语法，这些语法会在客户端浏览器上看得到-->
 
 <%-- 这事服务器注释语法，jsp注释语法，该语法不会发送到客户端，所以用户段看不到--%>
@@ -81,7 +80,7 @@
 		</div>
   </div>
 
-	<div id="allContent">
+
     <C:forEach var="b" items="${requestScope.allBlogs}"   varStatus="s">
         <article class="excerpt excerpt-5" style=""><a class="focus" href="#" title="${b.title}" target="_blank" ><img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: inline;"></a>
             <header><a class="cat" href="#" title="java板块" >java板块<i></i></a>
@@ -95,10 +94,12 @@
             <p class="note">${fn:substring(b.content, 0,40)} ...</p>
         </article>
     </C:forEach>
-
-	</div>
-	<img id="loadImg" src="images/load.gif" style="width: 200px;height: 60px;display: none;"/>
-	<nav class="pagination" style="display: none;">
+	<a href="/BlogServlet?method=listTopBlogs&page=1&count=3">首页</a>
+	<a href="/BlogServlet?method=listTopBlogs&page=${requestScope.pageBean.previousPage}&count=3">上一页</a>
+	<a href="/BlogServlet?method=listTopBlogs&page=${requestScope.pageBean.nextPage}&count=3">下一页</a>
+	<a href="/BlogServlet?method=listTopBlogs&page=${requestScope.pageBean.allPages}&count=3">尾页</a>
+	<span>当前第${requestScope.pageBean.nowPage}页/总共${requestScope.pageBean.allPages}页 ,每页${requestScope.pageBean.everyPageCount}条/总共${requestScope.pageBean.allCount}条</span>
+  <nav class="pagination" style="display: none;">
 	<ul>
 	  <li class="prev-page"></li>
 	  <li class="active"><span>1</span></li>
@@ -118,8 +119,12 @@
 	  <li role="presentation"><a href="#contact" aria-controls="contact" role="tab" data-toggle="tab" >联系站长</a></li>
 	</ul>
 	<div class="tab-content">
-	  <div role="tabpanel" class="tab-pane contact active"  id="notice">
-
+	  <div role="tabpanel" class="tab-pane contact active" id="notice">
+		<h2>日志总数:
+			  888篇
+		  </h2>
+		  <h2>网站运行:
+		  <span id="sitetime">88天 </span></h2>
 	  </div>
 		<div role="tabpanel" class="tab-pane contact" id="contact">
 		  <h2>QQ:
@@ -205,70 +210,5 @@
 <%@include file="footer.jsp"%>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.ias.js"></script>
-<input type="hidden" value="1" name="nowPage"/>
-<script>
-	$(document).ready(function() {
-		$.get("http://localhost:8080/CarShop/CarServlet?method=mohuSearch&key=",function(data){
-			alert(data);
-		});
-
-
-
-		$(window).scroll(function() {
-
-			if ($(document).scrollTop()<=0){
-				//alert("滚动条已经到达顶部");
-			}
-
-			if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
-				//当鼠标滚动到网页底部，发起ajax加载下一页
-				var nowPage=$("[name='nowPage']").val();
-
-
-
-				$.ajax({
-					type:"get",
-					url:"/BlogServlet?method=listBlogsByAjaxPage&page="+(parseInt(nowPage)+1)+"&count=10",
-					beforeSend:function(){
-						$("#loadImg").show(50);
-					},
-					complete:function(){
-						$("#loadImg").hide(1);
-					},
-					success:function(data){
-						for(var n=0;n<data.length;n++){
-							$("#allContent").append("<article class='excerpt excerpt-5' style=''><a class='focus' href='#' title='"+data[n].title+"' target='_blank' ><img class='thumb' data-original='images/201610181739277776.jpg' src='images/201610181739277776.jpg' alt='用DTcms做一个独立博客网站（响应式模板）'  style='display: inline;'></a><header><a class='cat' href='#' title='java板块' >java板块<i></i></a><h2><a href='BlogServlet?method=getDetailOfBlogById&blogid="+data[n].blogid+"' title='"+data[n].title+"' target='_blank' >"+data[n].blogid+"---"+data[n].title+"</a></h2></header><p class='meta'><time class='time'><i class='glyphicon glyphicon-time'></i>"+data[n].publishTime+"</time><span class='views'><i class='glyphicon glyphicon-eye-open'></i> "+data[n].visitedCount+"</span> <a class='comment' href='##comment' title='评论' target='_blank' ><i class='glyphicon glyphicon-comment'></i>0</a></p><p class='note'>"+data[n].content+" ...</p></article>\n");
-						}
-					}
-
-						});
-				$("[name='nowPage']").val(parseInt(nowPage)+1);
-			}
-		});
-	});
-
-</script>
-
-<script src="js/jquery.lazyload.min.js"></script>
-<script>
-	function callbackAAA(data){
-			$("#notice").append("您所在的城市："+data.city+"<br/>");
-			$("#notice").append("PM2.5："+data.pm25+"<br/>");
-			$("#notice").append("天气："+data.weather[0].weather+"<br/>");
-			$("#notice").append("风力："+data.weather[0].wind+"<br/>");
-			$("#notice").append("温度："+data.weather[0].temp+"<br/>");
-	}
-
-</script>
-<script>
-	$.ajax({
-		type:"get",
-		url:"https://api.asilu.com/weather/",
-		data:{"city":"襄阳"},
-		dataType:"jsonp",
-		jsonpCallback:"callbackAAA"
-	})
-
-</script>
 </body>
 </html>

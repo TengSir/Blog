@@ -3,6 +3,10 @@ package edu.hbuas.blog.control;
 import edu.hbuas.blog.model.dao.UserDAO;
 import edu.hbuas.blog.model.dao.UserDAOImp;
 import edu.hbuas.blog.model.javabean.Users;
+import edu.hbuas.blog.service.UserService;
+import edu.hbuas.blog.service.UserServiceImp;
+import edu.hbuas.blog.util.MD5;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -17,11 +21,14 @@ import java.util.UUID;
 @MultipartConfig
 @WebServlet(name = "UserServlet",urlPatterns = "/UserServlet")
 public class UserServlet extends HttpServlet {
+
     private UserDAO  userDAO;
+    private UserService  service;
 
     @Override
     public void init() throws ServletException {
         userDAO=new UserDAOImp();
+        service=new UserServiceImp();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -142,7 +149,10 @@ public class UserServlet extends HttpServlet {
 
         Users  u=new Users();
         u.setUsername(username);
-        u.setPassword(password);
+        //对密码做加盐操作（加盐对业务规则）
+
+        u.setPassword(MD5.genertedPassword(MD5.addSoltToPassword(username,password)));
+
         u.setNickname(nickname);
         u.setImage("upload/"+childpath+newFileName);
         u.setSex(Long.parseLong(sex));
@@ -170,7 +180,7 @@ public class UserServlet extends HttpServlet {
      * @throws IOException
      */
     protected void logoff(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().removeAttribute("user");//销毁session中所有的数据
+        request.getSession().invalidate();//销毁session中所有的数据
         System.out.println("退出登陆的方法");
         response.sendRedirect("index.jsp");
 
@@ -185,70 +195,26 @@ public class UserServlet extends HttpServlet {
      */
     protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
-       //当前这个login方法对应的前端请求分两种
+        //当前这个login方法对应的前端请求分两种
         //一种是用户正常登陆，需要填写用户名和密码以及验证码
 
         if(request.getParameter("username")!=null&&request.getParameter("password")!=null&&request.getParameter("inputCode")!=null){
 
-            //1.先获取上一个页面用户输入的账号信息
-            String inputCode= request.getParameter("inputCode");
-
-//            if(inputCode.equalsIgnoreCase(request.getSession().getAttribute("code").toString())){
-                String username= request.getParameter("username");
-                String password= request.getParameter("password");
-
-                System.out.println(request.getContextPath());
-                try {
-                    //2.查询数据库中有没有这个账户密码对应的用户信息
-
-                    Users u=userDAO.login(username,password);
-                    //3.判断查询结果，如果查到该用户则跳转到首页，没有则跳到登陆页面，提示错误消息
-
+                    Users u=service.processNormalLogin(request,response);
                     if(u!=null){
-                        //在登陆成功的分支里判断用户是否要保存用户名和密码到cookie
-                        String[]  values=request.getParameterValues("rememberMe");
-                        if(values==null){
-                            System.out.println("用户不要记住密码");
-                        }else{
-                            Cookie  usernameCookie=new Cookie("username",username);
-                            usernameCookie.setMaxAge(60);
-                            response.addCookie(usernameCookie);
-                        }
-
-                        //这就是后台执行业务完成后，跳转页面的方法
+                        service.rememberUserToCookie(request,response);
                         request.getSession().setAttribute("user",u);
                         request.getRequestDispatcher("index.jsp").forward(request,response);
                     }else{
-                        request.setCharacterEncoding("utf-8");
-                        response.setCharacterEncoding("utf-8");
-                        request.setAttribute("errorMessage","用户名或者密码错误！");
                         request.getRequestDispatcher("login.jsp").forward(request,response);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }  finally {
-                }
-//            }else{
-//
-//                request.setAttribute("errorMessage","验证码输入错误！");
-//                request.getRequestDispatcher("login.jsp").forward(request,response);
-//            }
-
         }else{
             //第二种自动登陆（三天免登陆），此时用户没有填写任何用户名和密码以及验证码
-            String username=null;
-            Cookie[]  cs=request.getCookies();
-            for(Cookie c:cs){
-                if(c.getName().equals("username")){
-                    username=c.getValue();
-                    break;
-                }
-            }
-            Users  u=userDAO.login(username);
+            Users u= service.processCookieLogin(request, response);
             request.getSession().setAttribute("user",u);
             request.getRequestDispatcher("index.jsp").forward(request,response);
         }
+
 
     }
 }

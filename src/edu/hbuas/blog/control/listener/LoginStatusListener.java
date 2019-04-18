@@ -12,15 +12,15 @@ public class LoginStatusListener implements HttpSessionAttributeListener {
 
     @Override
     public void attributeAdded(HttpSessionBindingEvent httpSessionBindingEvent) {
-        System.out.println("当前又一个人登陆了，登陆的账户信息如下：----------------"+httpSessionBindingEvent.getName()+"\t"+httpSessionBindingEvent.getValue());;
+        //System.out.println("当前又一个人登陆了，登陆的账户信息如下：----------------"+httpSessionBindingEvent.getName()+"\t"+httpSessionBindingEvent.getValue());;
 
-        if(httpSessionBindingEvent.getSession().getServletContext().getAttribute(((Users)httpSessionBindingEvent.getValue()).getUserid()+"")!=null){
-            httpSessionBindingEvent.getSession().removeAttribute(httpSessionBindingEvent.getName());
-            System.out.println("当前这个账号已经登陆，此时不能再次登陆，删除这个新的账户的session里面登陆用户信息，同时跳转到登陆页面");
-
-        }else{
-            httpSessionBindingEvent.getSession().getServletContext().setAttribute(((Users)httpSessionBindingEvent.getValue()).getUserid()+"",httpSessionBindingEvent.getValue());
-        }
+//        if(httpSessionBindingEvent.getSession().getServletContext().getAttribute(((Users)httpSessionBindingEvent.getValue()).getUserid()+"")!=null){
+//            httpSessionBindingEvent.getSession().removeAttribute(httpSessionBindingEvent.getName());
+//            System.out.println("当前这个账号已经登陆，此时不能再次登陆，删除这个新的账户的session里面登陆用户信息，同时跳转到登陆页面");
+//
+//        }else{
+//            httpSessionBindingEvent.getSession().getServletContext().setAttribute(((Users)httpSessionBindingEvent.getValue()).getUserid()+"",httpSessionBindingEvent.getValue());
+//        }
 
         //        System.out.println("当前登陆的所有用户信息如下:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 //        Enumeration<String> keys= httpSessionBindingEvent.getSession().getServletContext().getAttributeNames();

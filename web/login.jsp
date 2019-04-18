@@ -165,8 +165,8 @@
 		<% request.setCharacterEncoding("utf-8"); %>
 		<b style="color: red;">${requestScope.errorMessage}</b>
 		<form action="UserServlet?method=login" method="post">
-			username:<input id="username" type="text" name="username" value="${cookie.username.value}"><br/>
-			password:<input type="password" name="password" value="${cookie.password.value}"><br/>
+			username:<input id="username" type="text" name="username" ><br/>
+			password:<input type="password" name="password"><br/>
 			验证码:<input id="verfy" type="text" name="inputCode" style="width: 60px"/><img src="CodeServlet"/><br/>
 
 			<C:choose>

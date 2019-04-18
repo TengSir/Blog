@@ -989,8 +989,7 @@
     </column>
     <column id="245" parent="233" name="password">
       <Position>3</Position>
-      <DataType>varchar(80)|0s</DataType>
-      <NotNull>1</NotNull>
+      <DataType>char(32)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="246" parent="233" name="nickname">
