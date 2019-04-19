@@ -5,9 +5,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="C" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<C:if test="${empty requestScope.allBlogs}">
-	<C:redirect url="/BlogServlet?method=listTopBlogs&page=1&count=10"></C:redirect>
-</C:if>
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -82,32 +79,14 @@
   </div>
 
 	<div id="allContent">
-    <C:forEach var="b" items="${requestScope.allBlogs}"   varStatus="s">
-        <article class="excerpt excerpt-5" style="">
-			<div style="float: left; width: 70%;">
-				<a class="focus" href="#" title="${b.title}" target="_blank" ><img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: inline;"></a>
-				<header><a class="cat" href="#" title="java板块" >java板块<i></i></a>
-					<h2><a href="BlogServlet?method=getDetailOfBlogById&blogid=${b.blogid}" title="${b.title}" target="_blank" >${b.blogid}---${b.title}</a>
-					</h2>
-				</header>
-				<p class="meta">
-					<time class="time"><i class="glyphicon glyphicon-time"></i>${b.publishtime}</time>
-					<span class="views"><i class="glyphicon glyphicon-eye-open"></i> ${b.visitedcount}</span> <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>0</a>
-				</p>
-				<p class="note">${fn:substring(b.content, 0,40)} ...</p>
-
-
-			</div>
-			<div style="float: left; width: 30%">
-						<a href="/UserServlet?method=loadUserInfo&userid=${b.user.userid}"><img src="${b.user.image}" width="40px" height="40px" style="border: 1px solid gray; border-radius: 20px"/></a><br/>
-						博主:${b.user.nickname}
-
-			</div>
-        </article>
-    </C:forEach>
 
 	</div>
-	<img id="loadImg" src="images/load.gif" style="width: 200px;height: 60px;display: none;"/>
+	<div style="width: 100%">
+		<div style="width: 100px;margin: auto;">
+			<img id="loadImg" src="images/loading.gif" style="width: 100px;height: 100px;display: none;"/>
+		</div>
+
+	</div>
 	<nav class="pagination" style="display: none;">
 	<ul>
 	  <li class="prev-page"></li>
@@ -218,24 +197,26 @@
 <input type="hidden" value="1" name="nowPage"/>
 <script>
 	$(document).ready(function() {
-		$.get("http://localhost:8080/CarShop/CarServlet?method=mohuSearch&key=",function(data){
-			alert(data);
+		$.ajax({
+			type:"get",
+			url:"/BlogServlet?method=listBlogsByAjaxPage&page=1&count=10",
+			success:function(data){
+				for(var n=0;n<data.length;n++){
+					$("#allContent").append("<article class='excerpt excerpt-5' style=''><div style='float: left; width: 70%;'><a class='focus' href='#' title='"+data[n].title+"' target='_blank' ><img class='thumb' data-original='images/201610181739277776.jpg' src='images/201610181739277776.jpg' alt='用DTcms做一个独立博客网站（响应式模板）'  style='display: inline;'></a><header><a class='cat' href='#' title='java板块' >java板块<i></i></a><h2><a href='BlogServlet?method=getDetailOfBlogById&blogid="+data[n].blogid+"' title='"+data[n].title+"' target='_blank' >"+data[n].blogid+"---"+data[n].title+"</a></h2></header><p class='meta'><time class='time'><i class='glyphicon glyphicon-time'></i>"+data[n].publishTime+"</time><span class='views'><i class='glyphicon glyphicon-eye-open'></i> "+data[n].visitedCount+"</span> <a class='comment' href='##comment' title='评论' target='_blank' ><i class='glyphicon glyphicon-comment'></i>0</a></p><p class='note'>"+data[n].content+" ...</p></div><div style='float: left; width: 30%'><a href='/UserServlet?method=loadUserInfo&userid="+data[n].userid+"'><img src='"+data[n].userimage+"' width='40px' height='40px' style='border: 1px solid gray; border-radius: 20px'/></a><br/>"+data[n].nickname+"</div></article>");
+				}
+			}
 		});
-
 
 
 		$(window).scroll(function() {
 
-			if ($(document).scrollTop()<=0){
-				//alert("滚动条已经到达顶部");
-			}
+			// if ($(document).scrollTop()<=0){
+			// 	//alert("滚动条已经到达顶部");
+			// }
 
 			if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
 				//当鼠标滚动到网页底部，发起ajax加载下一页
 				var nowPage=$("[name='nowPage']").val();
-
-
-
 				$.ajax({
 					type:"get",
 					url:"/BlogServlet?method=listBlogsByAjaxPage&page="+(parseInt(nowPage)+1)+"&count=10",
@@ -247,7 +228,7 @@
 					},
 					success:function(data){
 						for(var n=0;n<data.length;n++){
-							$("#allContent").append("<article class='excerpt excerpt-5' style=''><a class='focus' href='#' title='"+data[n].title+"' target='_blank' ><img class='thumb' data-original='images/201610181739277776.jpg' src='images/201610181739277776.jpg' alt='用DTcms做一个独立博客网站（响应式模板）'  style='display: inline;'></a><header><a class='cat' href='#' title='java板块' >java板块<i></i></a><h2><a href='BlogServlet?method=getDetailOfBlogById&blogid="+data[n].blogid+"' title='"+data[n].title+"' target='_blank' >"+data[n].blogid+"---"+data[n].title+"</a></h2></header><p class='meta'><time class='time'><i class='glyphicon glyphicon-time'></i>"+data[n].publishTime+"</time><span class='views'><i class='glyphicon glyphicon-eye-open'></i> "+data[n].visitedCount+"</span> <a class='comment' href='##comment' title='评论' target='_blank' ><i class='glyphicon glyphicon-comment'></i>0</a></p><p class='note'>"+data[n].content+" ...</p></article>\n");
+							$("#allContent").append("<article class='excerpt excerpt-5' style=''><div style='float: left; width: 70%;'><a class='focus' href='#' title='"+data[n].title+"' target='_blank' ><img class='thumb' data-original='images/201610181739277776.jpg' src='images/201610181739277776.jpg' alt='用DTcms做一个独立博客网站（响应式模板）'  style='display: inline;'></a><header><a class='cat' href='#' title='java板块' >java板块<i></i></a><h2><a href='BlogServlet?method=getDetailOfBlogById&blogid="+data[n].blogid+"' title='"+data[n].title+"' target='_blank' >"+data[n].blogid+"---"+data[n].title+"</a></h2></header><p class='meta'><time class='time'><i class='glyphicon glyphicon-time'></i>"+data[n].publishTime+"</time><span class='views'><i class='glyphicon glyphicon-eye-open'></i> "+data[n].visitedCount+"</span> <a class='comment' href='##comment' title='评论' target='_blank' ><i class='glyphicon glyphicon-comment'></i>0</a></p><p class='note'>"+data[n].content+" ...</p></div><div style='float: left; width: 30%'><a href='/UserServlet?method=loadUserInfo&userid="+data[n].userid+"'><img src='"+data[n].userimage+"' width='40px' height='40px' style='border: 1px solid gray; border-radius: 20px'/></a><br/>"+data[n].nickname+"</div></article>");
 						}
 					}
 
