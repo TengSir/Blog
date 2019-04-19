@@ -8,9 +8,18 @@ public class Blogs {
   private String content;
   private String publishtime;
   private long visitedcount;
-  private long userid;
+
+  private Users user;//has-a
 
   public Blogs() {
+  }
+
+  public Blogs(long blogid, String title, String content, String publishtime, long visitedcount) {
+    this.blogid = blogid;
+    this.title = title;
+    this.content = content;
+    this.publishtime = publishtime;
+    this.visitedcount = visitedcount;
   }
 
   @Override
@@ -21,19 +30,9 @@ public class Blogs {
             ", content='" + content + '\'' +
             ", publishtime='" + publishtime + '\'' +
             ", visitedcount=" + visitedcount +
-            ", userid=" + userid +
+            ", user=" + user +
             '}';
   }
-
-  public Blogs(long blogid, String title, String content, String publishtime, long visitedcount, long userid) {
-    this.blogid = blogid;
-    this.title = title;
-    this.content = content;
-    this.publishtime = publishtime;
-    this.visitedcount = visitedcount;
-    this.userid = userid;
-  }
-
 
   public long getBlogid() {
     return blogid;
@@ -43,7 +42,6 @@ public class Blogs {
     this.blogid = blogid;
   }
 
-
   public String getTitle() {
     return title;
   }
@@ -51,7 +49,6 @@ public class Blogs {
   public void setTitle(String title) {
     this.title = title;
   }
-
 
   public String getContent() {
     return content;
@@ -61,7 +58,6 @@ public class Blogs {
     this.content = content;
   }
 
-
   public String getPublishtime() {
     return publishtime;
   }
@@ -69,7 +65,6 @@ public class Blogs {
   public void setPublishtime(String publishtime) {
     this.publishtime = publishtime;
   }
-
 
   public long getVisitedcount() {
     return visitedcount;
@@ -79,13 +74,11 @@ public class Blogs {
     this.visitedcount = visitedcount;
   }
 
-
-  public long getUserid() {
-    return userid;
+  public Users getUser() {
+    return user;
   }
 
-  public void setUserid(long userid) {
-    this.userid = userid;
+  public void setUser(Users user) {
+    this.user = user;
   }
-
 }

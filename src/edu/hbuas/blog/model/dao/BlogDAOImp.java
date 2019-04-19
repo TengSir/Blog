@@ -1,6 +1,7 @@
 package edu.hbuas.blog.model.dao;
 
 import edu.hbuas.blog.model.javabean.Blogs;
+import edu.hbuas.blog.model.javabean.Users;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +28,7 @@ public class BlogDAOImp extends  BaseDAOImp implements BlogDAO {
     public List<Blogs> listBlogsByPage(int page,int count) {
         List<Blogs> bs=new ArrayList<>();
         try {
-            ResultSet rs=getSta().executeQuery("select *  from blogs limit "+(page-1)*count+","+count);
+            ResultSet rs=getSta().executeQuery("select title,content,publishtime,visitedcount,image,blogid,nickname,b.userid from blogs b,users  u where u.userid=b.userid   limit "+(page-1)*count+","+count);
             while(rs.next()){
                 Blogs b=new Blogs();
                 b.setBlogid(rs.getInt("blogid"));
@@ -35,6 +36,16 @@ public class BlogDAOImp extends  BaseDAOImp implements BlogDAO {
                 b.setContent(rs.getString("content"));
                 b.setPublishtime(rs.getString("publishtime"));
                 b.setVisitedcount(rs.getInt("visitedcount"));
+
+
+                Users u=new Users();
+                u.setImage(rs.getString("image"));
+                u.setUserid(rs.getInt("b.userid"));
+                u.setNickname(rs.getString("nickname"));
+
+                b.setUser(u);
+
+
                 bs.add(b);
             }
 

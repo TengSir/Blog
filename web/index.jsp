@@ -83,16 +83,26 @@
 
 	<div id="allContent">
     <C:forEach var="b" items="${requestScope.allBlogs}"   varStatus="s">
-        <article class="excerpt excerpt-5" style=""><a class="focus" href="#" title="${b.title}" target="_blank" ><img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: inline;"></a>
-            <header><a class="cat" href="#" title="java板块" >java板块<i></i></a>
-                <h2><a href="BlogServlet?method=getDetailOfBlogById&blogid=${b.blogid}" title="${b.title}" target="_blank" >${b.blogid}---${b.title}</a>
-                </h2>
-            </header>
-            <p class="meta">
-                <time class="time"><i class="glyphicon glyphicon-time"></i>${b.publishtime}</time>
-                <span class="views"><i class="glyphicon glyphicon-eye-open"></i> ${b.visitedcount}</span> <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>0</a>
-            </p>
-            <p class="note">${fn:substring(b.content, 0,40)} ...</p>
+        <article class="excerpt excerpt-5" style="">
+			<div style="float: left; width: 70%;">
+				<a class="focus" href="#" title="${b.title}" target="_blank" ><img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: inline;"></a>
+				<header><a class="cat" href="#" title="java板块" >java板块<i></i></a>
+					<h2><a href="BlogServlet?method=getDetailOfBlogById&blogid=${b.blogid}" title="${b.title}" target="_blank" >${b.blogid}---${b.title}</a>
+					</h2>
+				</header>
+				<p class="meta">
+					<time class="time"><i class="glyphicon glyphicon-time"></i>${b.publishtime}</time>
+					<span class="views"><i class="glyphicon glyphicon-eye-open"></i> ${b.visitedcount}</span> <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>0</a>
+				</p>
+				<p class="note">${fn:substring(b.content, 0,40)} ...</p>
+
+
+			</div>
+			<div style="float: left; width: 30%">
+						<a href="/UserServlet?method=loadUserInfo&userid=${b.user.userid}"><img src="${b.user.image}" width="40px" height="40px" style="border: 1px solid gray; border-radius: 20px"/></a><br/>
+						博主:${b.user.nickname}
+
+			</div>
         </article>
     </C:forEach>
 

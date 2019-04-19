@@ -202,6 +202,9 @@ public class BlogServlet extends HttpServlet {
 
 		request.setAttribute("pageBean",p);
 
+
+
+
 		try {
 			List<Blogs> bs=blogDAO.listBlogsByPage(Integer.parseInt(page),Integer.parseInt(count));
 

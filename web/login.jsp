@@ -1,8 +1,5 @@
 <%@ taglib prefix="C" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-	<C:if test="${not empty  cookie.username.value}">
-		<C:redirect url="/UserServlet?method=login"></C:redirect>
-	</C:if>
 
 <!doctype html>
 <html lang="zh-CN">
@@ -164,6 +161,11 @@
 	<div class="padding-big">
 		<% request.setCharacterEncoding("utf-8"); %>
 		<b style="color: red;">${requestScope.errorMessage}</b>
+
+		<C:if test="${not empty  cookie.username.value}">
+			<C:redirect url="/UserServlet?method=login"></C:redirect>
+		</C:if>
+
 		<form action="UserServlet?method=login" method="post">
 			username:<input id="username" type="text" name="username" ><br/>
 			password:<input type="password" name="password"><br/>
@@ -171,10 +173,10 @@
 
 			<C:choose>
 				<C:when test="${empty cookie.username.value}">
-					<input type="checkbox" name="rememberMe" value="true" />三天免登陆<br/>
+					<input type="checkbox" name="rememberMe" value="true" />一周免登陆<br/>
 				</C:when>
 				<C:otherwise>
-					<input type="checkbox" name="rememberMe" value="true"  checked="checked"/>三天免登陆<br/>
+					<input type="checkbox" name="rememberMe" value="true"  checked="checked"/>一周免登陆<br/>
 				</C:otherwise>
 			</C:choose>
 
