@@ -59,15 +59,14 @@ public class BlogServlet extends HttpServlet {
      * @throws IOException
      */
     protected void listBlogsByAjaxPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try{
-            Thread.sleep(10000);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
+    	try {
+			Thread.sleep(5000);
+		}catch (Exception e){
+    		e.printStackTrace();
+		}
         String page=request.getParameter("page");
         String count=request.getParameter("count");
-        System.out.println(page+","+count);
 
         try {
             List<Blogs> bs=blogDAO.listBlogsByPage(Integer.parseInt(page),Integer.parseInt(count));
@@ -83,7 +82,9 @@ public class BlogServlet extends HttpServlet {
                 jsonObj.put("publishTime",b.getPublishtime());
                 jsonObj.put("visitedCount",b.getVisitedcount());
                 jsonObj.put("image","images/201610181739277776.jpg");
-
+				jsonObj.put("userimage",b.getUser().getImage());
+				jsonObj.put("nickname",b.getUser().getNickname());
+				jsonObj.put("userid",b.getUser().getUserid());
 
                 allBlogsJson.put(jsonObj);
 
