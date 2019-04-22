@@ -2,11 +2,46 @@ package edu.hbuas.blog.model.dao;
 
 import edu.hbuas.blog.model.javabean.Users;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAOImp  extends BaseDAOImp implements  UserDAO{
+
+    /**
+     * 模拟的jdbc事务处理订单业务模块的代码
+     * @param username
+     * @param password
+     * @return
+     */
+//    public boolean  addOrder(Order order,ArrayList<OrderItems> os){
+//
+//        //JDBC的事务都是语句级的，自动事务，每一条语句都是一个事务，而且自动提交。
+//
+//       Connection  con= getCon();
+//       con.setAutoCommit(false);//设置当前的连接对象的事务规则为手动控制（不自动提交）
+//       try{
+//           getSta().executeUpdate("insert into order values(order.getoid,or5der.gettime)");
+//
+//           getSta().executeUpdate("insert into  orderitem values(xx.xxx)")
+//           getSta().executeUpdate("insert into  orderitem values(xx.xxx)")
+//           getSta().executeUpdate("insert into  orderitem values(xx.xxx)")
+//           getSta().executeUpdate("insert into  orderitem values(xx.xxx)")
+//           getSta().executeUpdate("insert into  orderitem values(xx.xxx)")；
+//       }catch(Exception e){
+//           con.rollback();
+//       }
+//
+//        con.commit();如果上述代码没有异常，则调用连接对象的commit方法，提交这个事务单元里的若干条语句，
+//
+//
+//    }
+
+
+
+
+
     @Override
     public Users login(String username, String password) {
         String loginSQL="select *  from  users where username=? and password=?";

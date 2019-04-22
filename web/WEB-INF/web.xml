@@ -19,6 +19,32 @@
         <listener-class>edu.hbuas.blog.control.listener.SessionListener</listener-class>
     </listener>
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+<error-page>
+        <error-code>501</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+<error-page>
+        <error-code>503</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+<error-page>
+        <error-code>505</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+<session-config>
+    <session-timeout>10</session-timeout>
+</session-config>
+
+
+
 
 
 </web-app>

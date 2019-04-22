@@ -60,11 +60,6 @@ public class BlogServlet extends HttpServlet {
      */
     protected void listBlogsByAjaxPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    	try {
-			Thread.sleep(5000);
-		}catch (Exception e){
-    		e.printStackTrace();
-		}
         String page=request.getParameter("page");
         String count=request.getParameter("count");
 
